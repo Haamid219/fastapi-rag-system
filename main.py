@@ -9,21 +9,18 @@ from langchain_community.vectorstores import Chroma
 import os
 from dotenv import load_dotenv
 
-# Load the secret vault
+# Load the env file
 load_dotenv()
 
-# Get the key from the vault
+# Get the key from the env file
 API_key = os.getenv("OPENROUTER_API_KEY")
 BASE_URL = "https://openrouter.ai/api/v1"
-# Switched to Llama 3.2 which is usually very stable on OpenRouter
 MODEL_NAME = "nvidia/nemotron-3-super-120b-a12b:free" 
 PDF_FILENAME = "machine_learning_wp-5_copy.pdf"
 
-# Global context
 vector_db = None
 local_embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
-# Modern Lifespan Handler (replaces @app.on_event)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global vector_db
@@ -76,5 +73,4 @@ async def ask_question(query: str):
 
 if __name__ == "__main__":
     import uvicorn
-    # Changing host to 127.0.0.1 makes it easier for Windows browsers
     uvicorn.run(app, host="127.0.0.1", port=8000)
